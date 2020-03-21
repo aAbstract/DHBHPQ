@@ -105,7 +105,7 @@ private:
       this->objs[key_hash] = new kvp_node<TK, TV>(key, value);
     else {
       // Open Addressing Algorithm
-      int trav_times = 1;*this->objs[1];
+      int trav_times = 1;
       int delta = key_hash % this->size;
       int offset = trav_times * delta;
       while (this->objs[key_hash + offset] != nullptr) {
