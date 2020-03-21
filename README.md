@@ -9,7 +9,7 @@ Double Hashed Binary Heap Priority Queue is an Improved Version of Priority Queu
 ### Complexity and Space Analysis:
   ##### Time: O(1)
   ##### Space: O(n)
-## hash_table
+## Hash Table
 ### Interface:
   ##### void add_item(TK key, TV value);
   ##### TV get_value(TK key);
