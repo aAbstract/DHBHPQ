@@ -107,6 +107,7 @@ private:
       // Open Addressing Algorithm
       int trav_times = 1;
       int delta = key_hash % this->size;
+      delta = (delta == 0) ? 1 : delta;
       int offset = trav_times * delta;
       while (this->objs[key_hash + offset] != nullptr) {
         offset = (++trav_times) * delta;
@@ -152,6 +153,7 @@ public:
     int first_tomp_stone_index = -1;
     int trav_times = 1;
     int delta = key_hash % this->size;
+    delta = (delta == 0) ? 1 : delta;
     int offset = trav_times * delta;
     while (true) {
       if (node == nullptr)
@@ -179,6 +181,7 @@ public:
     int first_tomp_stone_index = -1;
     int trav_times = 1;
     int delta = key_hash % this->size;
+    delta = (delta == 0) ? 1 : delta;
     int offset = trav_times * delta;
     while (true) {
       if (node == nullptr)
