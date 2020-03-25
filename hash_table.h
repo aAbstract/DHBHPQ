@@ -5,6 +5,7 @@
 # Interface:
   void add_item(TK key, TV value);
   TV get_value(TK key);
+  void set_new_value(TK key, TV new_value);
   void clear();
   void delete_item(TK key);
   is_empty();
@@ -15,16 +16,11 @@
 */
 
 #include <functional>
+#include <string>
 
 // Constant Definations
 // const TOMP_STONE : place holder for deletd
 #define TOMP_STONE "TOMP_STONE"
-
-// Include Lib Protection
-#ifndef STRING_LIB
-#define STRING_LIB
-#include <string>
-#endif
 
 // Include Lib Protection
 #ifndef STD
@@ -38,7 +34,7 @@ class kvp_node {
 // Private Fields
 // var key : key object
 // var value : value object associated with the given key
-// vat state : indicates if it's tomp stone or unassigned
+// var state : indicates if it's tomp stone or unassigned
 private:
   TK key;
   TV value;
@@ -48,13 +44,15 @@ public:
   kvp_node(TK _key, TV _value) {
     this->key = _key;
     this->value = _value;
+    this->state = "";
   }
   // Class Getters
   TK get_key() {return this->key; }
   TV get_value() {return this->value; }
   string get_state() {return this->state; }
-  //Class Setters
+  // Class Setters
   void set_state(string new_state) {this->state = new_state; }
+  void set_value(TV new_value) {this->value = new_value; }
 };
 
 // Hash Table Implementation
@@ -169,6 +167,34 @@ public:
           this->objs[key_hash + offset] = nullptr;
         }
         return node->get_value();
+      }
+      offset = (++trav_times) * delta;
+      node = this->objs[key_hash + offset];
+    }
+  }
+  // Sets New Value For Given Key
+  void set_new_value(TK key, TV new_value) {
+    int key_hash = this->get_hash(key) % this->size;
+    kvp_node<TK, TV>* node = this->objs[key_hash];
+    int first_tomp_stone_index = -1;
+    int trav_times = 1;
+    int delta = key_hash % this->size;
+    delta = (delta == 0) ? 1 : delta;
+    int offset = trav_times * delta;
+    while (true) {
+      if (node == nullptr)
+        throw "This Key is Not Exist";
+      else if (node->get_state() == TOMP_STONE) {
+        if (first_tomp_stone_index == -1)
+          first_tomp_stone_index = key_hash + offset;
+      }
+      else if (node->get_key() == key) {
+        // Optimiztion Hack
+        if (first_tomp_stone_index != -1) {
+          this->objs[first_tomp_stone_index] = node;
+          this->objs[key_hash + offset] = nullptr;
+        }
+        node->set_value(new_value);
       }
       offset = (++trav_times) * delta;
       node = this->objs[key_hash + offset];

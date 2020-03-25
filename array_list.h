@@ -23,14 +23,27 @@ private:
   T* objs;
   int count;
   int size;
-  void double_size() {
-    this->size = this->size * 2;
-    T* new_ptr = new T[this->size];
-    for (int i = 0; i < this->count; i++) {
-      new_ptr[i] = this->objs[i];
+  // Resize Allocated Memory
+  void resize() {
+    if ((this->count) < this->size)
+      return;
+    else if ((this->count) == this->size) {
+      this->size = this->size * 2;
+      T* new_ptr = new T[this->size];
+      for (int i = 0; i < this->count; i++) {
+        new_ptr[i] = this->objs[i];
+      }
+      delete[] this->objs;
+      this->objs = new_ptr;
+    } else {
+      this->size = this->size / 2;
+      T* new_ptr = new T[this->size];
+      for (int i = 0; i < this->count; i++) {
+        new_ptr[i] = this->objs[i];
+      }
+      delete[] this->objs;
+      this->objs = new_ptr;
     }
-    delete[] this->objs;
-    this->objs = new_ptr;
   }
 public:
   // Default Constructor
@@ -41,9 +54,8 @@ public:
   }
   // Adds Element to The Array
   void add_item(T new_item) {
-    if (this->count >= this->size)
-      this->double_size();
     this->objs[this->count++] = new_item;
+    this->resize();
   }
   // Get Item By Inedx From The Array
   T get_item(int index) {
@@ -52,6 +64,34 @@ public:
     } else {
       throw "Index Was Out The Bounds of The Array";
     }
+  }
+  // Add Item In Index
+  void insert_item(int i, T v) {
+    if (i >= 0 && i < this->count)
+      this->objs[i] = v;
+    else
+      throw "Index Was Out The Bounds of The Array";
+  }
+  // Remove Last Item in The Array
+  void remove_last() {
+    this->count--;
+    this->resize();
+  }
+  // Remove First Item in The Array
+  void remove_item(int index) {
+    T* new_ptr = new T[this->size];
+    for (int i = 0; i < this->count; i++) {
+      if (index == i)
+        continue;
+      new_ptr[i] = this->objs[i];
+    }
+    this->objs = new_ptr;
+    this->count--;
+    this->resize();
+  }
+  // Get Counst of Items
+  int get_count() {
+    return this->count;
   }
   // Clears The Content
   void clear() {
