@@ -32,8 +32,12 @@ int main() {
      dict.add_item(2, "AHMED");
      dict.add_item(3, "EHAB");
      dict.add_item(4, "ADEL");
+     dict.add_item(5, "BELAL");
+     dict.add_item(6, "OSAMA");
+     dict.add_item(7, "BAZA");
+     dict.add_item(8, "ANYONE");
      try {
-       print(dict.get_value(4));
+       print(dict.get_value(3));
      } catch (char const* msg) {
        print(msg);
      }
