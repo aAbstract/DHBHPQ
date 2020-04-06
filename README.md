@@ -29,4 +29,5 @@
   #### void delete_item(TK key); O(1)*
   #### is_empty(); O(1)
   #### int get_size(); O(1)
-  ##### Space: O(n)
+  #### void set_new_value(TK key, TV new_value); O(1)*
+  #### Space: O(n)
