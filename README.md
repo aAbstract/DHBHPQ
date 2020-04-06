@@ -1,6 +1,6 @@
 # DHBHPQ
-Double Hashed Binary Heap Priority Queue is an Improved Version of Priority Queue using a modified hash table to keep track of the elements' indexes
-#Interface:
+## Double Hashed Binary Heap Priority Queue is an Improved Version of Priority Queue using a modified hash table to keep track of the elements' indexes
+# Interface:
   ##### void add_item(int pror, T value); O(log(n))
   ##### T poll(); O(log(n))
   ##### T peek(); O(1)
