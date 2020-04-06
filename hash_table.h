@@ -9,6 +9,7 @@
   void clear(); O(1)
   void delete_item(TK key); O(1)*
   is_empty(); O(1)
+  int get_size(); O(1)
 
   Space: O(n)
 */
@@ -108,6 +109,7 @@ private:
             int new_addr = (key_hash + offset) % this->size;
             while (this->objs[new_addr] != nullptr) {
                 offset = (++trav_times) * delta;
+                new_addr = (key_hash + offset) % this->size;
             }
             this->objs[new_addr] = new kvp_node<TK, TV>(key, value);
         }
@@ -135,24 +137,27 @@ public:
     }
     // Add Mapping To The Hash Table
     void add_item(TK key, TV value) {
-        if (++(this->count) > int(this->size * this->tolerance)) {
+        if ((this->count + 1) > int(this->size * this->tolerance)) {
             int new_size = this->get_next_prime(this->size * 2);
             int old_size = this->size;
             this->size = new_size;
             mem_resize(old_size);
         }
         this->assign(key, value);
+        this->count++;
     }
     // Value Lookup
     TV get_value(TK key) {
         int key_hash = this->get_hash(key) % this->size;
         kvp_node<TK, TV>* node = this->objs[key_hash];
         int first_tomp_stone_index = -1;
-        int trav_times = 1;
+        int trav_times = 0;
         int delta = key_hash % this->size;
         delta = (delta == 0) ? 1 : delta;
-        int offset = trav_times * delta;
-        int new_addr = (key_hash + offset) % this->size;
+        // int offset = trav_times * delta;
+        // int new_addr = (key_hash + offset) % this->size;
+        int offset = 0;
+        int new_addr = 0;
         while (true) {
             if (node == nullptr)
                 throw "This Key is Not Exist";
@@ -178,11 +183,13 @@ public:
         int key_hash = this->get_hash(key) % this->size;
         kvp_node<TK, TV>* node = this->objs[key_hash];
         int first_tomp_stone_index = -1;
-        int trav_times = 1;
+        int trav_times = 0;
         int delta = key_hash % this->size;
         delta = (delta == 0) ? 1 : delta;
-        int offset = trav_times * delta;
-        int new_addr = (key_hash + offset) % this->size;
+        // int offset = trav_times * delta;
+        // int new_addr = (key_hash + offset) % this->size;
+        int offset = 0;
+        int new_addr = 0;
         while (true) {
             if (node == nullptr)
                 throw "This Key is Not Exist";
@@ -200,6 +207,7 @@ public:
                 break;
             }
             offset = (++trav_times) * delta;
+            new_addr = (key_hash + offset) % this->size;
             node = this->objs[new_addr];
         }
     }
@@ -208,11 +216,13 @@ public:
         int key_hash = this->get_hash(key) % this->size;
         kvp_node<TK, TV>* node = this->objs[key_hash];
         int first_tomp_stone_index = -1;
-        int trav_times = 1;
+        int trav_times = 0;
         int delta = key_hash % this->size;
         delta = (delta == 0) ? 1 : delta;
-        int offset = trav_times * delta;
-        int new_addr = (key_hash + offset) % this->size;
+        //int offset = trav_times * delta;
+        //int new_addr = (key_hash + offset) % this->size;
+        int offset = 0;
+        int new_addr = 0;
         while (true) {
             if (node == nullptr)
                 throw "This Key is Not Exist";
@@ -225,7 +235,8 @@ public:
                 break;
             }
             offset = (++trav_times) * delta;
-            kvp_node<TK, TV>* node = this->objs[new_addr];
+            new_addr = (key_hash + offset) % this->size;
+            node = this->objs[new_addr];
         }
     }
     // Clear All Items
@@ -238,6 +249,10 @@ public:
         this->count = 0;
         this->objs = new kvp_node<TK, TV> * [this->size];
         this->init();
+    }
+    // Get Hash Table Size
+    int get_size() {
+        return this->count;
     }
     // Check if Empty
     bool is_empty() {
